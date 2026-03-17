@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Build Your First AI Agent — Free 2-Hour Webinar</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --accent: #00e5a0;
+    --accent2: #7c6fff;
+    --accent3: #ff6b6b;
+    --accent4: #ffd166;
+    --text: #e8edf8;
+    --muted: #8896b3;
+    --border: rgba(255,255,255,0.07);
+    --glow: 0 0 40px rgba(0,229,160,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 20%, rgba(124,111,255,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,229,160,0.14) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.3);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero-badge::before {
+    content: '●';
+    animation: blink 1.4s ease infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.6rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--muted);
+    max-width: 620px;
+    margin: 0 auto 48px;
+    font-weight: 300;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section {
+    padding: 80px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+    color: var(--text);
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,229,160,0.25);
+    transform: translateY(-3px);
+    box-shadow: var(--glow);
+  }
+
+  .card-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .card-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  /* ── OUTCOMES ── */
+  .outcome-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .outcome-item:last-child { border-bottom: none; }
+
+  .outcome-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: rgba(0,229,160,0.1);
+  }
+
+  /* ── TOOL CARDS ── */
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .tool-card.n8n::before { background: linear-gradient(90deg, #ff6d5a, #ff9500); }
+  .tool-card.ai::before { background: linear-gradient(90deg, var(--accent2), #a78bfa); }
+  .tool-card.tg::before { background: linear-gradient(90deg, #229ED9, #54c5f8); }
+  .tool-card.gs::before { background: linear-gradient(90deg, #34a853, #0f9d58); }
+
+  .tool-icon {
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .free-badge {
+    display: inline-block;
+    background: rgba(0,229,160,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(0,229,160,0.25);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,229,160,0.2);
+  }
+
+  .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .tl-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+  }
+
+  .tl-desc {
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+
+  /* ── STEPS ── */
+  .steps { counter-reset: step; }
+
+  .step {
+    counter-increment: step;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px 28px 72px;
+    position: relative;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .step:hover { border-color: rgba(124,111,255,0.3); }
+
+  .step::before {
+    content: counter(step);
+    position: absolute;
+    left: 24px;
+    top: 28px;
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: #fff;
+  }
+
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .step p {
+    color: var(--muted);
+    font-size: 0.93rem;
+    line-height: 1.7;
+  }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #a0e8c0;
+    margin: 14px 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.6;
+  }
+
+  .code-block .cm { color: #6e7f9e; font-style: italic; }
+  .code-block .ky { color: #7c6fff; }
+  .code-block .st { color: #ffd166; }
+  .code-block .fn { color: #00e5a0; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 40px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+  }
+
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 110px;
+  }
+
+  .flow-box {
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-align: center;
+    border: 1px solid;
+    min-width: 100px;
+    line-height: 1.3;
+  }
+
+  .flow-box.trig { background: rgba(0,229,160,0.1); border-color: rgba(0,229,160,0.4); color: var(--accent); }
+  .flow-box.proc { background: rgba(124,111,255,0.1); border-color: rgba(124,111,255,0.4); color: #a78bfa; }
+  .flow-box.ai   { background: rgba(255,107,107,0.1); border-color: rgba(255,107,107,0.4); color: var(--accent3); }
+  .flow-box.fmt  { background: rgba(255,209,102,0.1); border-color: rgba(255,209,102,0.4); color: var(--accent4); }
+  .flow-box.out  { background: rgba(0,229,160,0.1); border-color: rgba(0,229,160,0.4); color: var(--accent); }
+
+  .flow-emoji { font-size: 1.4rem; }
+
+  .flow-arrow {
+    color: var(--muted);
+    font-size: 1.3rem;
+    margin: 0 6px;
+    flex-shrink: 0;
+    align-self: flex-start;
+    padding-top: 14px;
+  }
+
+  .flow-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ── DEMO CARDS ── */
+  .demo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .demo-card:hover {
+    border-color: rgba(0,229,160,0.25);
+    transform: translateY(-2px);
+  }
+
+  .demo-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    margin-bottom: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .demo-prompt {
+    background: #0d1117;
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .demo-response {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── BONUS ── */
+  .bonus-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bonus-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.04);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    line-height: 1;
+  }
+
+  .bonus-tag {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .bonus-tag.b1 { background: rgba(124,111,255,0.15); color: #a78bfa; }
+  .bonus-tag.b2 { background: rgba(255,107,107,0.15); color: var(--accent3); }
+  .bonus-tag.b3 { background: rgba(255,209,102,0.15); color: var(--accent4); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 24px;
+  }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(0,229,160,0.06), rgba(124,111,255,0.06));
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 24px 0;
+  }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 3px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer strong { color: var(--accent); }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; color: #111; }
+    .hero { min-height: auto; padding: 40px 0; }
+    .card, .step, .demo-card, .bonus-card, .tool-card { box-shadow: none !important; border-color: #ddd !important; }
+    .hero::before { display: none; }
+  }
+
+  p { margin-bottom: 10px; }
+  ul { padding-left: 20px; color: var(--muted); }
+  ul li { margin-bottom: 6px; font-size: 0.93rem; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-badge">Free 2-Hour Live Webinar · College Students</div>
+  <h1 class="hero-title">
+    Build Your First<br>
+    <span class="line2">AI Agent — For Free</span>
+  </h1>
+  <p class="hero-subtitle">
+    A hands-on, no-code workshop where you'll automate your studies using n8n,
+    a free AI model, and Telegram — zero programming experience needed.
+  </p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-val">2h</div><div class="stat-label">Live Workshop</div></div>
+    <div class="stat"><div class="stat-val">100%</div><div class="stat-label">Free Tools</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Coding Required</div></div>
+    <div class="stat"><div class="stat-val">1</div><div class="stat-label">Working AI Agent</div></div>
+  </div>
+</div>
+
+<hr class="divider"/>
+
+<!-- ═══ LEARNING OUTCOMES ═══ -->
+<section>
+  <div class="section-label">Section 01</div>
+  <h2>Learning Outcomes</h2>
+  <p style="color:var(--muted); margin-bottom:28px;">By the end of this 2-hour session, every student will walk away with real, working knowledge — not just theory.</p>
+
+  <div class="card" style="padding:8px 28px;">
+    <div class="outcome-item">
+      <div class="outcome-icon">🤖</div>
+      <div>
+        <h3>Understand What an AI Agent Is</h3>
+        <p style="color:var(--muted); font-size:0.93rem;">Learn the difference between a basic chatbot and a true AI agent that can take actions, process information, and respond automatically.</p>
+      </div>
+    </div>
+    <div class="outcome-item">
+      <div class="outcome-icon">⚡</div>
+      <div>
+        <h3>Build a Real Automation Workflow</h3>
+        <p style="color:var(--muted); font-size:0.93rem;">Create a fully functional n8n workflow from scratch — connecting triggers, AI nodes, and response channels with drag-and-drop.</p>
+      </div>
+    </div>
+    <div class="outcome-item">
+      <div class="outcome-icon">🧠</div>
+      <div>
+        <h3>Connect a Free AI Model</h3>
+        <p style="color:var(--muted); font-size:0.93rem;">Use OpenRouter's free tier (Mistral 7B or similar) to add real AI intelligence to your workflow — no credit card required.</p>
+      </div>
+    </div>
+    <div class="outcome-item">
+      <div class="outcome-icon">📱</div>
+      <div>
+        <h3>Deploy a Telegram Study Assistant</h3>
+        <p style="color:var(--muted); font-size:0.93rem;">Make your AI agent accessible via Telegram so you can ask it study questions from your phone, anytime, anywhere.</p>
+      </div>
+    </div>
+    <div class="outcome-item">
+      <div class="outcome-icon">🚀</div>
+      <div>
+        <h3>Know How to Extend It Further</h3>
+        <p style="color:var(--muted); font-size:0.93rem;">Leave with a foundation you can build on — adding PDF summarization, exam prep modes, email drafting, and more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ USE CASE ═══ -->
+<section>
+  <div class="section-label">Section 02</div>
+  <h2>The AI Agent Use Case</h2>
+
+  <div class="highlight-box" style="margin-bottom:32px;">
+    <div style="font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">✦ Chosen Use Case</div>
+    <div style="font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; margin-bottom:12px;">AI Study Assistant<br><span style="font-size:1rem; font-weight:400; color:var(--muted);">on Telegram</span></div>
+    <p style="color:var(--muted); font-size:0.95rem;">Students send a topic or question to their Telegram bot → the AI agent explains it clearly, provides examples, and suggests what to study next. Works 24/7, completely free.</p>
+  </div>
+
+  <div class="card-grid-2">
+    <div class="card">
+      <div style="color:var(--accent); font-size:1.5rem; margin-bottom:10px;">💬</div>
+      <h3>How a Student Uses It Daily</h3>
+      <p style="color:var(--muted); font-size:0.93rem;">Open Telegram, message the bot: <em>"Explain photosynthesis in simple terms"</em> or <em>"What's the difference between RAM and ROM?"</em> — get a clear, helpful answer in seconds. No Googling, no scrolling.</p>
+    </div>
+    <div class="card">
+      <div style="color:var(--accent2); font-size:1.5rem; margin-bottom:10px;">🎯</div>
+      <h3>Why This Use Case?</h3>
+      <p style="color:var(--muted); font-size:0.93rem;">Every student already has Telegram. Study questions come up at 11pm when no one's available to help. This AI agent is always on, perfectly patient, and free to run 24/7.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ TOOLS ═══ -->
+<section>
+  <div class="section-label">Section 03</div>
+  <h2>Tools Used — All Free</h2>
+
+  <div class="card-grid-2" style="margin-bottom:20px;">
+    <div class="tool-card n8n">
+      <span class="tool-icon">🔧</span>
+      <div class="free-badge">100% Free · Open Source</div>
+      <h3>n8n (Automation Engine)</h3>
+      <p style="color:var(--muted); font-size:0.93rem;">Think of n8n as the "brain organizer" — it connects all your tools together without any coding. You drag and drop blocks (called nodes) to build automations. Like building with LEGO blocks for software.</p>
+      <div style="margin-top:14px;">
+        <span class="tag">no-code</span>
+        <span class="tag">open source</span>
+        <span class="tag">visual builder</span>
+      </div>
+    </div>
+    <div class="tool-card ai">
+      <span class="tool-icon">🧠</span>
+      <div class="free-badge">Free Tier Available</div>
+      <h3>OpenRouter (Free AI Models)</h3>
+      <p style="color:var(--muted); font-size:0.93rem;">OpenRouter gives you free access to powerful AI models like <strong>Mistral 7B</strong>, <strong>Llama 3</strong>, and <strong>Gemma</strong>. You sign up, get a free API key, and connect it to n8n. The AI does the actual thinking.</p>
+      <div style="margin-top:14px;">
+        <span class="tag">Mistral 7B</span>
+        <span class="tag">Llama 3</span>
+        <span class="tag">free API</span>
+      </div>
+    </div>
+    <div class="tool-card tg">
+      <span class="tool-icon">✈️</span>
+      <div class="free-badge">100% Free</div>
+      <h3>Telegram Bot (Interface)</h3>
+      <p style="color:var(--muted); font-size:0.93rem;">Telegram lets you create a free "bot" — a special account that can receive and send messages automatically. Students message the bot with their questions, and n8n picks them up and sends them to the AI.</p>
+      <div style="margin-top:14px;">
+        <span class="tag">messaging</span>
+        <span class="tag">bot API</span>
+        <span class="tag">mobile-friendly</span>
+      </div>
+    </div>
+    <div class="tool-card gs">
+      <span class="tool-icon">📊</span>
+      <div class="free-badge">Free with Google Account</div>
+      <h3>Google Sheets (Optional Log)</h3>
+      <p style="color:var(--muted); font-size:0.93rem;">Optionally store all questions and answers in a Google Sheet so you can review your study history later. n8n connects to Google Sheets in just a few clicks — a great bonus feature to add.</p>
+      <div style="margin-top:14px;">
+        <span class="tag">logging</span>
+        <span class="tag">history</span>
+        <span class="tag">optional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ SCHEDULE ═══ -->
+<section>
+  <div class="section-label">Section 04</div>
+  <h2>2-Hour Webinar Schedule</h2>
+  <p style="color:var(--muted); margin-bottom:36px;">Every minute is accounted for. The pace is beginner-friendly with live demos and follow-along breaks.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">0:00 – 0:10 · 10 min</div>
+      <div class="tl-title">Welcome & Ice Breaker</div>
+      <div class="tl-desc">Intro, who is this for, what we're building today. Quick poll: "Have you ever used any AI tool?" Set up expectations — by the end, every student will have a working AI agent.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:10 – 0:25 · 15 min</div>
+      <div class="tl-title">What Is an AI Agent? (Concept Session)</div>
+      <div class="tl-desc">Explain AI agents in plain English using relatable examples: "It's like hiring an intern who never sleeps and always answers your questions." Cover the difference between a chatbot (talks) and an agent (talks + acts). Show the flow: Trigger → Think → Respond.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:25 – 0:40 · 15 min</div>
+      <div class="tl-title">Introduction to n8n (Live Tour)</div>
+      <div class="tl-desc">Open n8n Cloud (free account). Walk through the interface: Canvas, Nodes, Triggers, Connections. Show students it looks like a flowchart. Demonstrate a tiny workflow: "When I click, show me today's date." Just to build confidence.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:40 – 0:50 · 10 min</div>
+      <div class="tl-title">Setting Up the Free Tools</div>
+      <div class="tl-desc">Students sign up for: n8n Cloud (free), OpenRouter (free API key), Telegram BotFather (create bot, get token). Presenter walks through each step live. QR codes on screen for easy access.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:50 – 1:30 · 40 min ⭐ Core Build</div>
+      <div class="tl-title">Building the AI Study Assistant (Live Build)</div>
+      <div class="tl-desc">The main hands-on session. Follow along step by step: Add Telegram trigger → Add HTTP Request node (OpenRouter AI) → Format the AI response → Send reply back to Telegram. Students build it alongside the presenter. 2 planned pause points for catching up.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">1:30 – 1:45 · 15 min</div>
+      <div class="tl-title">Testing & Debugging Together</div>
+      <div class="tl-desc">Send test messages to the Telegram bot live on screen. Debug common issues (wrong token, JSON format errors). Celebrate when it works! Students share their bot's responses in the chat.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">1:45 – 1:55 · 10 min</div>
+      <div class="tl-title">Bonus Ideas & Real-World Use Cases</div>
+      <div class="tl-desc">Show 3 quick extensions students can build on their own: PDF summarizer, exam prep quiz generator, email reply assistant. Spark ideas for final projects.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">1:55 – 2:00 · 5 min</div>
+      <div class="tl-title">Q&A, Wrap-Up & Next Steps</div>
+      <div class="tl-desc">Open Q&A, share resource links, encourage students to customize their bot. Certificate of completion for participants.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ BUILD GUIDE ═══ -->
+<section>
+  <div class="section-label">Section 05</div>
+  <h2>Step-by-Step Build Guide</h2>
+  <p style="color:var(--muted); margin-bottom:36px;">Follow these steps during the live webinar. Each step is written so clearly that a complete beginner can follow along without getting lost.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-title">Create a Free n8n Cloud Account</div>
+      <p>Go to <strong style="color:var(--accent)">n8n.io</strong> and click "Get Started Free." Sign up with your email. You'll land on the n8n dashboard — this is where all your automations live. Think of it as your personal automation studio. No downloads, no installations — it runs entirely in your browser.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Get Your Free OpenRouter API Key</div>
+      <p>Go to <strong style="color:var(--accent)">openrouter.ai</strong>, click "Sign In" and use Google login. Once inside, go to <strong>API Keys</strong> → click <strong>Create Key</strong>. Name it "Study Assistant". Copy the key — it looks like: <code style="color:var(--accent4); background:#0d1117; padding:2px 8px; border-radius:4px;">sk-or-xxxxxxxxxxxx</code>. This key is what allows n8n to talk to the AI. Keep it safe, don't share it.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Create Your Telegram Bot</div>
+      <p>Open Telegram on your phone. Search for <strong style="color:var(--accent)">@BotFather</strong> (the official bot creator). Send the message <code style="color:var(--accent4); background:#0d1117; padding:2px 8px; border-radius:4px;">/newbot</code>. Give your bot a name like "MyStudyBot" and a username like "mystudyhelper_bot". BotFather will reply with a token that looks like: <code style="color:var(--accent4); background:#0d1117; padding:2px 8px; border-radius:4px;">7123456789:AAHxxxxxxxxxxxxxxxx</code>. Copy this token — it's your bot's password.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Create a New Workflow in n8n</div>
+      <p>In n8n, click the big <strong>"+ New Workflow"</strong> button. You'll see a blank canvas — like a blank whiteboard. Give your workflow a name: <em>"AI Study Assistant"</em>. This is where you'll drag and connect all the building blocks of your agent.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Add the Telegram Trigger Node</div>
+      <p>Click the <strong>"+"</strong> button on the canvas. Search for <strong>"Telegram Trigger"</strong>. Select it and drag it onto the canvas. Click on it to open its settings. Under Credentials, click <strong>"Create New"</strong> and paste your Telegram Bot Token. Set the trigger to fire on <strong>"Message"</strong>. This node will "wake up" your workflow every time someone sends your bot a message.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Add an HTTP Request Node (AI Connector)</div>
+      <p>Click <strong>"+"</strong> to add another node. Search for <strong>"HTTP Request"</strong>. This node can talk to any API on the internet — including OpenRouter's AI. Set the method to <strong>POST</strong> and paste this URL:</p>
+      <div class="code-block"><span class="st">https://openrouter.ai/api/v1/chat/completions</span></div>
+      <p>Under Headers, add: <code style="color:var(--accent4)">Authorization: Bearer YOUR_API_KEY_HERE</code> and <code style="color:var(--accent4)">Content-Type: application/json</code>.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Configure the AI Request Body</div>
+      <p>In the HTTP Request node, go to <strong>Body</strong> → choose <strong>JSON</strong>. Paste this template — it tells the AI how to behave and what to answer:</p>
+      <div class="code-block">{
+  <span class="ky">"model"</span>: <span class="st">"mistralai/mistral-7b-instruct:free"</span>,
+  <span class="ky">"messages"</span>: [
+    {
+      <span class="ky">"role"</span>: <span class="st">"system"</span>,
+      <span class="ky">"content"</span>: <span class="st">"You are a friendly AI study assistant for college students. Explain concepts clearly and simply. Keep answers under 200 words. Use examples."</span>
+    },
+    {
+      <span class="ky">"role"</span>: <span class="st">"user"</span>,
+      <span class="ky">"content"</span>: <span class="st">"{{ $json.message.text }}"</span>  <span class="cm">// ← This pulls the student's message</span>
+    }
+  ]
+}</div>
+      <p>The magic part is <code style="color:var(--accent4)">{{ $json.message.text }}</code> — this automatically picks up whatever the student typed in Telegram.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Add a "Set" Node to Extract the AI Reply</div>
+      <p>Add a <strong>"Set"</strong> node after the HTTP Request. This node plucks out just the AI's reply from the full response. Create a new field called <code style="color:var(--accent4)">aiReply</code> with this expression:</p>
+      <div class="code-block">{{ $json.choices[0].message.content }}</div>
+      <p>This navigates into the AI response to grab the actual text of the answer. Without this step you'd be sending the student a giant wall of code instead of a clean answer.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Add the Telegram "Send Message" Node</div>
+      <p>Add a <strong>"Telegram"</strong> node (not the trigger, the action one). Connect it to your bot credentials (same token as before). Set the Chat ID to: <code style="color:var(--accent4)">{{ $('Telegram Trigger').item.json.message.chat.id }}</code>. Set the message text to: <code style="color:var(--accent4)">{{ $json.aiReply }}</code>. This sends the AI's answer back to whoever asked the question.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">Activate & Test Your AI Agent</div>
+      <p>Connect all nodes in order (Telegram Trigger → HTTP Request → Set → Telegram). Click the <strong>big blue "Activate" toggle</strong> in the top right. Now open Telegram, find your bot, and send it: <em>"What is Newton's second law?"</em>. Watch it reply with a real AI-generated answer in seconds! 🎉</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ FLOW DIAGRAM ═══ -->
+<section>
+  <div class="section-label">Section 06</div>
+  <h2>Visual Workflow Explanation</h2>
+  <p style="color:var(--muted); margin-bottom:28px;">Here's exactly what happens the moment a student sends a message to the bot:</p>
+
+  <div class="flow">
+    <div class="flow-node">
+      <div class="flow-emoji">📱</div>
+      <div class="flow-box trig">Telegram<br>Trigger</div>
+      <div class="flow-label">Student sends<br>a question</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="flow-emoji">📤</div>
+      <div class="flow-box proc">HTTP<br>Request</div>
+      <div class="flow-label">Sends question<br>to OpenRouter</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="flow-emoji">🧠</div>
+      <div class="flow-box ai">Mistral 7B<br>AI Model</div>
+      <div class="flow-label">Generates<br>smart answer</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="flow-emoji">✂️</div>
+      <div class="flow-box fmt">Set Node<br>Format</div>
+      <div class="flow-label">Extracts clean<br>text reply</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="flow-emoji">💬</div>
+      <div class="flow-box out">Telegram<br>Reply</div>
+      <div class="flow-label">Answer sent<br>back to student</div>
+    </div>
+  </div>
+
+  <div class="card-grid-3">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem; margin-bottom:10px;">⏱️</div>
+      <h3 style="font-size:0.95rem;">Total Response Time</h3>
+      <p style="color:var(--muted); font-size:0.88rem;">The whole flow from question to answer typically takes 2–5 seconds.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem; margin-bottom:10px;">🔁</div>
+      <h3 style="font-size:0.95rem;">Runs Continuously</h3>
+      <p style="color:var(--muted); font-size:0.88rem;">Once activated, the workflow listens 24/7. No need to keep your computer open.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem; margin-bottom:10px;">💸</div>
+      <h3 style="font-size:0.95rem;">Costs $0</h3>
+      <p style="color:var(--muted); font-size:0.88rem;">n8n free tier + OpenRouter free model = completely free to run every day.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ DEMO EXAMPLES ═══ -->
+<section>
+  <div class="section-label">Section 07</div>
+  <h2>Demo Examples — Try These Live</h2>
+  <p style="color:var(--muted); margin-bottom:32px;">During the webinar, students will test these prompts live to see the agent in action. Each shows a different way students can use it every day.</p>
+
+  <div class="card-grid-3">
+    <div class="demo-card">
+      <div class="demo-num">DEMO 01 · Science</div>
+      <div class="demo-prompt">"Explain photosynthesis like I'm 10 years old and give me a real-life example."</div>
+      <div class="demo-response">The AI will break down the concept using simple language (sunlight = food for plants), give an analogy (like charging a phone), and offer a tip on what to remember for exams — all in under 200 words.</div>
+    </div>
+    <div class="demo-card">
+      <div class="demo-num">DEMO 02 · Exam Prep</div>
+      <div class="demo-prompt">"Give me 5 short quiz questions on the French Revolution with the answers."</div>
+      <div class="demo-response">The AI generates a ready-to-use self-quiz. Students can message this while commuting, eating lunch, or right before class. The agent becomes a personal flashcard generator on demand.</div>
+    </div>
+    <div class="demo-card">
+      <div class="demo-num">DEMO 03 · Writing Help</div>
+      <div class="demo-prompt">"Help me write a 3-sentence thesis statement for an essay on climate change and developing countries."</div>
+      <div class="demo-response">The AI provides a structured thesis with a clear argument, evidence pointer, and significance line. Students can iterate: "Make it stronger" or "Make it simpler" — like having a writing tutor on call.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ FINAL OUTCOME ═══ -->
+<section>
+  <div class="section-label">Section 08</div>
+  <h2>Final Project Outcome</h2>
+
+  <div class="highlight-box">
+    <div style="font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; margin-bottom:16px; color:var(--accent);">🎓 What You Built Today</div>
+    <p style="color:var(--muted); font-size:0.95rem; margin-bottom:16px;">By the end of the webinar, every student has a <strong style="color:var(--text)">personal AI Study Assistant</strong> running on Telegram that:</p>
+    <div class="card-grid-2" style="margin-top:16px;">
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <span style="color:var(--accent); font-size:1.2rem; flex-shrink:0;">✓</span>
+        <span style="color:var(--muted); font-size:0.93rem;">Answers any subject question with AI-powered explanations, 24 hours a day</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <span style="color:var(--accent); font-size:1.2rem; flex-shrink:0;">✓</span>
+        <span style="color:var(--muted); font-size:0.93rem;">Generates quiz questions on any topic for self-testing before exams</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <span style="color:var(--accent); font-size:1.2rem; flex-shrink:0;">✓</span>
+        <span style="color:var(--muted); font-size:0.93rem;">Helps with essay writing, thesis statements, and argument structure</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <span style="color:var(--accent); font-size:1.2rem; flex-shrink:0;">✓</span>
+        <span style="color:var(--muted); font-size:0.93rem;">Works from any device — phone, tablet, laptop — through Telegram</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <span style="color:var(--accent); font-size:1.2rem; flex-shrink:0;">✓</span>
+        <span style="color:var(--muted); font-size:0.93rem;">Costs absolutely nothing to run — free tools, free AI, free hosting</span>
+      </div>
+      <div style="display:flex; gap:12px; align-items:flex-start;">
+        <span style="color:var(--accent); font-size:1.2rem; flex-shrink:0;">✓</span>
+        <span style="color:var(--muted); font-size:0.93rem;">Can be shared with classmates — each person can add the same Telegram bot</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ BONUS ═══ -->
+<section>
+  <div class="section-label">Section 09</div>
+  <h2>Bonus: 3 Things to Build Next</h2>
+  <p style="color:var(--muted); margin-bottom:32px;">Once you've mastered the core agent, here are three powerful upgrades to attempt on your own. Each builds on what you learned today.</p>
+
+  <div class="card-grid-3">
+    <div class="bonus-card">
+      <div class="bonus-num">1</div>
+      <div class="bonus-tag b1">Bonus 01</div>
+      <h3>📄 AI PDF Summarizer</h3>
+      <p style="color:var(--muted); font-size:0.93rem; margin-bottom:14px;">Upload any PDF (lecture notes, research paper, textbook chapter) to a Google Drive folder. n8n watches the folder, extracts the text, sends it to the AI, and messages you a clean bullet-point summary on Telegram.</p>
+      <p style="color:var(--muted); font-size:0.88rem;"><strong style="color:var(--text)">New skills learned:</strong> Google Drive node, PDF text extraction, summarization prompting.</p>
+    </div>
+    <div class="bonus-card">
+      <div class="bonus-num">2</div>
+      <div class="bonus-tag b2">Bonus 02</div>
+      <h3>🧪 AI Exam Prep Quiz Bot</h3>
+      <p style="color:var(--muted); font-size:0.93rem; margin-bottom:14px;">Tell the bot your exam topic and how many questions you want. It generates a multiple-choice quiz, waits for your answers one by one, scores you at the end, and explains each wrong answer. Like a personal tutor.</p>
+      <p style="color:var(--muted); font-size:0.88rem;"><strong style="color:var(--text)">New skills learned:</strong> Memory / conversation state, conditional logic, scoring loops in n8n.</p>
+    </div>
+    <div class="bonus-card">
+      <div class="bonus-num">3</div>
+      <div class="bonus-tag b3">Bonus 03</div>
+      <h3>📧 AI Email Reply Generator</h3>
+      <p style="color:var(--muted); font-size:0.93rem; margin-bottom:14px;">Connect your Gmail. When you receive an email from a professor, forward it to your Telegram bot with a quick instruction like "Write a polite reply asking for an extension." The AI drafts the reply — you just review and send.</p>
+      <p style="color:var(--muted); font-size:0.88rem;"><strong style="color:var(--text)">New skills learned:</strong> Gmail node, email parsing, professional tone prompting.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══ QUICK REFERENCE ═══ -->
+<section>
+  <div class="section-label">Quick Reference</div>
+  <h2>Free Resources Cheat Sheet</h2>
+  <div class="card" style="padding:8px 0;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border);">
+          <th style="text-align:left; padding:14px 24px; color:var(--muted); font-weight:500; font-family:'DM Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;">Tool</th>
+          <th style="text-align:left; padding:14px 24px; color:var(--muted); font-weight:500; font-family:'DM Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;">URL</th>
+          <th style="text-align:left; padding:14px 24px; color:var(--muted); font-weight:500; font-family:'DM Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;">What to do</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:14px 24px;"><strong>n8n Cloud</strong></td>
+          <td style="padding:14px 24px; font-family:'DM Mono',monospace; color:var(--accent); font-size:0.85rem;">n8n.io</td>
+          <td style="padding:14px 24px; color:var(--muted);">Sign up free, create workflow</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:14px 24px;"><strong>OpenRouter</strong></td>
+          <td style="padding:14px 24px; font-family:'DM Mono',monospace; color:var(--accent); font-size:0.85rem;">openrouter.ai</td>
+          <td style="padding:14px 24px; color:var(--muted);">Sign up, create API key</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:14px 24px;"><strong>Telegram BotFather</strong></td>
+          <td style="padding:14px 24px; font-family:'DM Mono',monospace; color:var(--accent); font-size:0.85rem;">t.me/BotFather</td>
+          <td style="padding:14px 24px; color:var(--muted);">Send /newbot, get token</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:14px 24px;"><strong>Free AI Model</strong></td>
+          <td style="padding:14px 24px; font-family:'DM Mono',monospace; color:var(--accent); font-size:0.85rem;">mistralai/mistral-7b-instruct:free</td>
+          <td style="padding:14px 24px; color:var(--muted);">Use in HTTP Request body</td>
+        </tr>
+        <tr>
+          <td style="padding:14px 24px;"><strong>OpenRouter API URL</strong></td>
+          <td style="padding:14px 24px; font-family:'DM Mono',monospace; color:var(--accent); font-size:0.85rem;">openrouter.ai/api/v1/chat/completions</td>
+          <td style="padding:14px 24px; color:var(--muted);">POST endpoint for AI calls</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <p style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:8px;">AI Agent Webinar — Build Your First AI Agent for Free</p>
+  <p>Designed for college students · <strong>No coding required</strong> · All tools free</p>
+  <p style="margin-top:16px; font-size:0.8rem; opacity:0.5;">n8n · OpenRouter · Mistral 7B · Telegram Bot API · Google Sheets</p>
+</footer>
+
+</body>
+</html>
